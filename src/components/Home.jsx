@@ -3,23 +3,25 @@ import React from "react";
 import ShareIcon from "@mui/icons-material/Share";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Box } from "@mui/system";
-import Navbar from "./Navbar";
+import useContextHook from "../customHook/useContextHook";
 
-const Home = (props) => {
+const Home = () => {
+  let context = useContextHook();
   return (
-    <>
-      <Navbar />
-      <Box
-        sx={{
-          margin: "auto",
-          display: "grid",
-          padding: "30px",
-          paddingTop: "80px",
-        }}
-      >
-        {props.data.map((item) => {
+    <Box
+      sx={{
+        margin: "auto",
+        display: "grid",
+        padding: "30px",
+        paddingTop: "80px",
+      }}
+    >
+      {/* checks whether the data is defined or not */}
+      {context.data !== undefined && context.data.length > 0 ? (
+        context.data.map((item) => {
           return (
-            <Card key={item.id}
+            <Card
+              key={item.id}
               sx={{
                 display: "inline-block",
                 margin: "10px",
@@ -50,9 +52,19 @@ const Home = (props) => {
               </Box>
             </Card>
           );
-        })}
-      </Box>
-    </>
+        })
+      ) : (
+        // renders loader if data is not defined
+        <Box sx={{ width: "50%", textAlign: "center", margin: "auto" }}>
+          <p>Please Refresh page after 10 seconds</p>
+          <img
+            style={{ width: "50%" }}
+            src="https://mir-s3-cdn-cf.behance.net/project_modules/max_632/04de2e31234507.564a1d23645bf.gif"
+            alt=""
+          />
+        </Box>
+      )}
+    </Box>
   );
 };
 

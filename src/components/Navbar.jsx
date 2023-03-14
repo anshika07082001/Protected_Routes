@@ -1,52 +1,59 @@
 import { Box } from "@mui/system";
 import React, { useEffect } from "react";
 import HomeIcon from "@mui/icons-material/Home";
-import { AppBar, Button, Toolbar, Typography } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
-import { UserConsumer } from "../context/UserContext";
+import { AppBar, Toolbar, Typography } from "@mui/material";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import useContextHook from "../customHook/useContextHook";
 
-const Navbar = (props) => {
+const Navbar = () => {
+  const context = useContextHook();
   let navigate = useNavigate();
-
+  // navigates to root component on reloading of app
   useEffect(() => {
-    if (Object.keys(props.login).length > 0) {
-      navigate("/profile");
-    } else {
-      navigate("/login");
+    if (!(Object.keys(context.login).length > 0)) {
+      navigate("/");
     }
-  }, [props.login]);
-  
+  }, []);
+
   return (
-    <Box sx={{ background: "whiteSmoke", flexGrow: 1 }}>
-      <AppBar position="fixed">
-        <UserConsumer>
-          {(User) => {
-            // console.log(User);
-            return (
-              <Toolbar>
-                <Link to="/" className="navbar__links">
-                  <HomeIcon fontSize="large" />
-                </Link>
-                <Typography
-                  variant="h6"
-                  component="div"
-                  sx={{ flexGrow: 1, marginLeft: "10px" }}
-                >
-                  QUOTES
-                </Typography>
-                <Link to="/signup" className="navbar__links">
-                  {/* <Button color="inherit"> */}
-                  SignUp / Login
-                  {/* </Button> */}
-                </Link>
-                <Link to="/profile">Profile</Link>
-                <Link to="/settings">Settings</Link>
-              </Toolbar>
-            );
-          }}
-        </UserConsumer>
-      </AppBar>
-    </Box>
+    <>
+      <Box sx={{ background: "whiteSmoke", flexGrow: 1 }}>
+        <AppBar position="fixed">
+          <Toolbar>
+            {/* link for home page */}
+            <Link to="/" className="navbar__links">
+              <HomeIcon fontSize="large" />
+            </Link>
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{ flexGrow: 1, marginLeft: "10px" }}
+            >
+              QUOTES
+            </Typography>
+            {!(Object.keys(context.login).length > 0) ? (
+              // link for signup login page
+              <Link to="/signup" className="navbar__links">
+                SignUp / Login
+              </Link>
+            ) : (
+              <></>
+            )}
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            {/* link for profile page */}
+            <Link to="/profile" className="navbar__links">
+              Profile
+            </Link>
+            &nbsp;&nbsp;
+            {/* link for settings page */}
+            <Link to="/settings" className="navbar__links">
+              Settings
+            </Link>
+          </Toolbar>
+        </AppBar>
+      </Box>
+      <Outlet />
+    </>
   );
 };
 

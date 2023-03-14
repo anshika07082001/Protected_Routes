@@ -1,19 +1,19 @@
 import { Button, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Navbar from "./Navbar";
+import useContextHook from "../customHook/useContextHook";
 
-const Login = (props) => {
+const Login = () => {
+  const context = useContextHook();
   let navigate = useNavigate();
+
+  // state for dynamic rendering of login input boxes
   const [loginInps, setLoginInps] = useState([
     { label: "Enter Your Email", type: "email", value: "" },
     { label: "Enter Password", type: "password", value: "" },
   ]);
-
-  useEffect(() => {
-    
-  }, [props.login]);
+  // login input change handler for setting the value of input boxes
   const loginInpHandler = (obj, e) => {
     loginInps.map((item) => {
       if (item.label === obj.label) {
@@ -22,66 +22,65 @@ const Login = (props) => {
     });
     setLoginInps([...loginInps]);
   };
-
+  // login button handler after successful login naviagates to profile page
   const loginHandler = (e) => {
     e.preventDefault();
-    console.log();
-    let cond = (ele) => ele.email === loginInps[0].value;
-    let user = props.sign.find(cond);
+    let cond = (ele) =>
+      ele.email === loginInps[0].value && ele.pwd === loginInps[1].value;
+    let user = context.sign.find(cond);
     if (user === undefined) {
-      alert("User Not found");
+      alert("Password Not Matched");
     } else {
-      props.setLogin(user);
+      context.setLogin(user);
       navigate("/profile");
     }
   };
   return (
-    <>
-      <Navbar />
+    <Box
+      sx={{
+        paddingTop: "80px",
+        margin: "auto",
+        textAlign: "center",
+        width: "60%",
+      }}
+    >
       <Box
         sx={{
-          paddingTop: "80px",
+          display: "flex",
+          flexDirection: "column",
+          width: "80%",
           margin: "auto",
-          textAlign: "center",
-          width: "60%",
+          border: "1px solid grey",
+          padding: "20px",
+          borderRadius: "10px",
+          gap: "20px",
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            width: "80%",
-            margin: "auto",
-            border: "1px solid grey",
-            padding: "20px",
-            borderRadius: "10px",
-            gap: "20px",
-          }}
-        >
-          <form className="login__form" onSubmit={loginHandler}>
-            {loginInps.map((item, i) => {
-              return (
-                <TextField
-                  key={i}
-                  variant="outlined"
-                  type={item.type}
-                  value={item.value}
-                  label={item.label}
-                  onChange={(e) => loginInpHandler(item, e)}
-                />
-              );
-            })}
-            <Typography>
-              Don't have an Account&nbsp;
-              <Link to="/signup">Sign Up</Link>
-            </Typography>
-            <Button variant="contained" type="submit">
-              Log In
-            </Button>
-          </form>
-        </Box>
+        <form className="login__form" onSubmit={loginHandler}>
+          {/* dynamic rendering of input boxes */}
+          {loginInps.map((item, i) => {
+            return (
+              <TextField
+                key={i}
+                variant="outlined"
+                type={item.type}
+                value={item.value}
+                label={item.label}
+                onChange={(e) => loginInpHandler(item, e)}
+              />
+            );
+          })}
+          <Typography>
+            Don't have an Account&nbsp;
+            {/* link for signUp page */}
+            <Link to="/signup">Sign Up</Link>
+          </Typography>
+          <Button variant="contained" type="submit">
+            Log In
+          </Button>
+        </form>
       </Box>
-    </>
+    </Box>
   );
 };
 

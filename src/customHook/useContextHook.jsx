@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import { useContext } from 'react'
+import UserContext from '../context/UserContext'
 
 const useContextHook = () => {
-  const [login, setLogin] = useState({});
-  return login;
-};
+ const context = useContext(UserContext)
+ return context
+}
 
-export default useContextHook;
+export default useContextHook

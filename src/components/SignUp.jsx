@@ -2,15 +2,18 @@ import { Button, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "./Navbar";
+import useContextHook from "../customHook/useContextHook";
 
-const SignUp = (props) => {
+const SignUp = () => {
+  let context = useContextHook();
+
+  // state for dynamic rendering of signup Input boxes
   const [signInps, setSignInps] = useState([
     { label: "Enter Your Name", type: "text", value: "" },
     { label: "Enter Your Email", type: "email", value: "" },
     { label: "Enter Password", type: "password", value: "" },
   ]);
-
+  // function for onchange of signup input boxes sets the value
   const signInpHandler = (obj, e) => {
     signInps.map((item) => {
       if (item.label === obj.label) {
@@ -19,7 +22,7 @@ const SignUp = (props) => {
     });
     setSignInps([...signInps]);
   };
-
+  // function signups new user
   const signBtnHandler = (e) => {
     e.preventDefault();
     let obj = {};
@@ -31,14 +34,15 @@ const SignUp = (props) => {
         email: signInps[1].value,
         pwd: signInps[2].value,
       };
-      props.sign.push(obj);
-      props.setSign([...props.sign]);
+      context.sign.push(obj);
+      context.setSign([...context.sign]);
+      alert("Sign up Successfully");
       reset();
     } else {
       alert("fill all details");
     }
   };
-
+  // function resets the signup form data
   const reset = () => {
     signInps.map((item) => {
       item.value = "";
@@ -48,7 +52,6 @@ const SignUp = (props) => {
 
   return (
     <>
-      <Navbar />
       <Box
         sx={{
           paddingTop: "80px",
@@ -70,6 +73,7 @@ const SignUp = (props) => {
           }}
         >
           <form className="sign__form" onSubmit={(e) => signBtnHandler(e)}>
+            {/* dynamic rendering of signup input boxes */}
             {signInps.map((item, i) => {
               return (
                 <TextField
@@ -84,6 +88,7 @@ const SignUp = (props) => {
             })}
             <Typography>
               Already Have an Account &nbsp;
+              {/* link for login page */}
               <Link to="/login">Log In</Link>
             </Typography>
             <Button variant="contained" type="submit">
