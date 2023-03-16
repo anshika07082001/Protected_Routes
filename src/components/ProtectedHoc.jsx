@@ -3,7 +3,6 @@ import { Navigate, useLocation } from "react-router-dom";
 import useContextHook from "../customHook/useContextHook";
 
 const ProtectedHoc = ({ children }) => {
-  console.log(children);
   let context = useContextHook();
   let location = useLocation();
   //   condition checks whether user is login or not if not navigates to login page
