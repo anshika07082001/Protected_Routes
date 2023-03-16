@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import Home from "./Home";
 import Login from "./Login";
 import SignUp from "./SignUp";
@@ -41,22 +41,23 @@ const Main = () => {
           element: <Login />,
         },
         {
-          path: "/profile",
+          path: "/protected",
+          // elements wrapped in protected hoc component
           element: (
-            // element wrapped in protected hoc component
             <ProtectedHoc>
-              <Profile />
+              <Outlet />
             </ProtectedHoc>
           ),
-        },
-        {
-          path: "settings",
-          element: (
-            // element wrapped in protected hoc component
-            <ProtectedHoc>
-              <Settings />
-            </ProtectedHoc>
-          ),
+          children: [
+            {
+              path: "/protected/profile",
+              element: <Profile />,
+            },
+            {
+              path: "/protected/settings",
+              element: <Settings />,
+            },
+          ],
         },
       ],
     },

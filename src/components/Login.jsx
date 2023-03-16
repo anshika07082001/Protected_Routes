@@ -32,7 +32,7 @@ const Login = () => {
       alert("Password Not Matched");
     } else {
       context.setLogin(user);
-      navigate("/profile");
+      navigate("/protected/profile");
     }
   };
   return (

@@ -41,12 +41,12 @@ const Navbar = () => {
             )}
             &nbsp;&nbsp;&nbsp;&nbsp;
             {/* link for profile page */}
-            <Link to="/profile" className="navbar__links">
+            <Link to="/protected/profile" className="navbar__links">
               Profile
             </Link>
             &nbsp;&nbsp;
             {/* link for settings page */}
-            <Link to="/settings" className="navbar__links">
+            <Link to="/protected/settings" className="navbar__links">
               Settings
             </Link>
           </Toolbar>
